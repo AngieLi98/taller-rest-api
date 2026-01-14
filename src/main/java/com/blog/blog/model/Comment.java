@@ -57,4 +57,8 @@ public class Comment {
         return createdAt;
     }
 
+    public void setUsuario(Posteo usuario) {
+        this.usuario = usuario;
+    }
+
 }

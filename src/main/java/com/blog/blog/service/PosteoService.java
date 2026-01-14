@@ -5,6 +5,7 @@ import com.blog.blog.model.Posteo;
 import com.blog.blog.repository.IposteoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,15 +25,18 @@ public class PosteoService implements IposteoService{
         return posteoRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Optional<Posteo> obtenerPorId(Long id) {
-        return posteoRepository.findById(id);
+        Posteo posteo = posteoRepository.findById(id)
+                .orElseThrow();
+
+        return Optional.of(posteo);
     }
 
     @Override
     public Posteo guardarPosteo(Posteo posteo) {
-        posteoRepository.save(posteo);
-        return posteo;
+        return posteoRepository.save(posteo);
     }
 
     @Override
@@ -59,6 +63,13 @@ public class PosteoService implements IposteoService{
 
     @Override
     public Posteo agregarComentario(Long posteoId, Comment comment) {
-        return null;
+        Posteo posteo = posteoRepository.findById(posteoId)
+                .orElseThrow(() -> new RuntimeException("Posteo no encontrada"));
+
+        comment.setUsuario(posteo);
+        posteo.getComments().add(comment);
+
+        return posteoRepository.save(posteo);
     }
+
 }

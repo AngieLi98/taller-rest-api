@@ -74,4 +74,12 @@ public class Posteo {
     public LocalDate getFecha_creacion() {
         return fecha_creacion;
     }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
 }
